@@ -1,5 +1,9 @@
 # Rivendell installation with ansible
 
+### Requirements
+
+CentOS 7.2
+
 ### Rivendell
 
 ### Install ansible

@@ -1,0 +1,14 @@
+---
+user:
+  name: rd-user
+  uid: 1001
+  group: users
+  shell: /usr/bin/bash
+
+locale_reg: en_US
+locale: UTF-8
+
+time_reg: US
+time_zone: Mountain
+
+

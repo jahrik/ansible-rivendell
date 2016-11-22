@@ -2,49 +2,31 @@
 - hosts: all
   become: true
   become_method: sudo
+  vars_files:
+    - vars/all.yml
+    - "vars/{{ ansible_os_family }}.yml"
+  vars_prompt:
+    - name: "user_password"
+      prompt: "Enter user password"
+      default: changeme
+      private: yes
+
   roles:
-  - epel
+    - epel
+    - user
+  # - sudo
+  # - known_hosts
+    - pkgs
+  # - xfce4
+  # - rivendell
+  # - touchscreen
+  # - italc
 
   tasks:
-  - name: Install required packages
-    package: name={{item}}
-             state=present
-    when: ansible_distribution == 'CentOS'
-    with_items:
-      - libogg-devel
-      - vorbis-tools
-      - libvorbis-devel
-      - flac-devel
-      # - libmad
-      # - libmad-devel
-      # - twolame
-      # - twolame-devel 
-      # - lame
-      # - lame-devel
-      - alsa-lib-devel
-      - jack-audio-connection-kit
-      - jack-audio-connection-kit-devel
-      - qt
-      - qt-devel
-      - qt-mysql
-      - qt3
-      - qt3-devel
-      - qt3-MySQL
-      - libsamplerate
-      - libsamplerate-devel
-      - libsndfile
-      - libsndfile-devel
-      - cdparanoia
-      - libXmu-devel
-      - cdparanoia-devel
-      - cdparanoia-libs
-      - id3lib
-      - id3lib-devel
-      - libcurl
-      - libcurl-devel  
-      - pam-devel
-      - soundtouch
-      - soundtouch-devel
-    tags: [ "package" ]
 
+    - name: Install desktop
+      yum: name={{item}} state=present
+      with_items: "{{ desktop }}"
 
+    #- name: startx
+      #template: src=xinitrc dest=~/.xinitrc
