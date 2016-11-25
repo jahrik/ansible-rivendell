@@ -1,7 +1,6 @@
 # Rivendell installation with ansible
 
 ## Table of Contents
-
    * [Rivendell installation with ansible](#rivendell-installation-with-ansible)
          * [Requirements](#requirements)
          * [Rivendell](#rivendell)
