@@ -18,6 +18,8 @@ CentOS 7.2
 
 ## Rivendell
 
+
+
 ## Install ansible
 
 Debian
@@ -31,8 +33,7 @@ sudo apt-get intsall python-pip
 sudo pip install ansible
 ```
 
-
-## Update the inventory.ini file with the master and client IP addresses
+## Update the inventory.ini file
 
 ex:
 ```

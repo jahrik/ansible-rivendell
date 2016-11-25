@@ -1,0 +1,35 @@
+---
+- name: Install desktop
+  yum:
+    name={{item}}
+    state=present
+  with_items: "{{ desktop.pkgs }}"
+
+- name: Enable GUI on startup
+  file:
+    src=/usr/lib/systemd/system/graphical.target
+    dest=/etc/systemd/system/default.target
+    owner=root
+    group=root
+    state=link
+
+- name: Generate ~/.xinitrc file
+  template:
+    src=xinitrc.j2
+    dest="/home/{{ user.name }}/.xinitrc"
+    owner="{{ user.name }}"
+    group="{{ user.group }}"
+    mode=0755
+
+- name: Enable autologin for {{ user.name }}
+  template:
+    src=custom.conf.j2
+    dest=/etc/gdm/custom.conf
+    owner=root
+    group=root
+    mode=644
+
+- name: Enable desktop manager service
+  service:
+    name="{{ desktop.dm }}"
+    enabled=yes
