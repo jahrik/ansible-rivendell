@@ -46,9 +46,9 @@
         group="{{ user.group }}"
         mode=0644
 
-    - name: Enable desktop manager
-      systemd:
-        name="{{ desktop.dm }}".service
+    - name: Enable desktop manager service
+      service:
+        name="{{ item }}"
         enabled=yes
-
-
+      with_items:
+        - "{{ desktop.dm }}"

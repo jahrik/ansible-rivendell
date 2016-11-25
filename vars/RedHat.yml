@@ -2,13 +2,14 @@
 desktop:
   pkgs:
   # - '@^Server with GUI'
-  # - 'X Window System'
-  - '@^Xfce'
+  - '@Xfce'
   # - lightdm
   session:
+    # - gnome-session
     - xfce4-session
   dm:
-    - gdm
+    - gdm.service
+    # - lightdm.service
 
 pkgs:
   - libogg-devel
