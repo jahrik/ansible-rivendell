@@ -44,11 +44,9 @@
         dest="/home/{{ user.name }}/.xinitrc"
         owner="{{ user.name }}"
         group="{{ user.group }}"
-        mode=0644
+        mode=0755
 
     - name: Enable desktop manager service
       service:
-        name="{{ item }}"
+        name="{{ desktop.dm }}"
         enabled=yes
-      with_items:
-        - "{{ desktop.dm }}"
