@@ -1,23 +1,24 @@
 # Rivendell installation with ansible
 
-## Table of Contents
+Table of Contents
+=================
+
    * [Rivendell installation with ansible](#rivendell-installation-with-ansible)
-         * [Requirements](#requirements)
-         * [Rivendell](#rivendell)
-         * [Install ansible](#install-ansible)
-         * [Update the inventory.ini file with the master and client IP addresses](#update-the-inventoryini-file-with-the-master-and-client-ip-addresses)
-         * [Run ansible](#run-ansible)
-         * [Tags](#tags)
-         * [Vagrant lab](#vagrant-lab)
+      * [Requirements](#requirements)
+      * [Rivendell](#rivendell)
+      * [Install ansible](#install-ansible)
+      * [Update the inventory.ini file with the master and client IP addresses](#update-the-inventoryini-file-with-the-master-and-client-ip-addresses)
+      * [Run ansible](#run-ansible)
+      * [Tags](#tags)
+      * [Vagrant lab](#vagrant-lab)
 
-
-### Requirements
+## Requirements
 
 CentOS 7.2
 
-### Rivendell
+## Rivendell
 
-### Install ansible
+## Install ansible
 
 Debian
 ```
@@ -31,7 +32,7 @@ sudo pip install ansible
 ```
 
 
-### Update the inventory.ini file with the master and client IP addresses
+## Update the inventory.ini file with the master and client IP addresses
 
 ex:
 ```
@@ -39,15 +40,15 @@ ex:
 rivendell-01.dev ansible_user=root
 ```
 
-### Run ansible
+## Run ansible
 
 ```
 ansible-playbook site.yml 
 ```
 
-### Tags
+## Tags
 
-### Vagrant lab
+## Vagrant lab
 
 ```
 vagrant up rivendell-01
