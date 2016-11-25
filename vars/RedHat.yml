@@ -1,7 +1,15 @@
 ---
 desktop:
-  - '@^Server with GUI'
+  pkgs:
+  # - '@^Server with GUI'
+  # - 'X Window System'
   - '@^Xfce'
+  # - lightdm
+  session:
+    - xfce4-session
+  dm:
+    - gdm
+
 pkgs:
   - libogg-devel
   - vorbis-tools
