@@ -1,23 +1,25 @@
 ---
+
 desktop:
   pkgs:
-  # - '@^Server with GUI'
   - '@X Window system'
   - '@Xfce'
-  # - lightdm
   session: xfce4-session
   dm: gdm.service
-pkgs:
+
+rivendell:
+  version: 2.15.1
+  pkgs:
   - libogg-devel
   - vorbis-tools
   - libvorbis-devel
   - flac-devel
-  # - libmad
-  # - libmad-devel
-  # - twolame
-  # - twolame-devel 
-  # - lame
-  # - lame-devel
+  - libmad
+  - libmad-devel
+  - twolame
+  - twolame-devel 
+  - lame
+  - lame-devel
   - alsa-lib-devel
   - jack-audio-connection-kit
   - jack-audio-connection-kit-devel

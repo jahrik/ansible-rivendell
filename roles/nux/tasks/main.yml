@@ -1,0 +1,20 @@
+---
+- name: Check if NUX repo is already configured.
+  stat: path={{ nux_repofile_path }}
+  register: nux_repofile_result
+
+- name: Install NUX repo.
+  yum:
+    name: "{{ nux_repo_url }}"
+    state: present
+  register: result
+  until: '"failed" not in result'
+  retries: 5
+  delay: 10
+  when: not nux_repofile_result.stat.exists
+
+- name: Import NUX GPG key.
+  rpm_key:
+    key: "{{ nux_repo_gpg_key_url }}"
+    state: present
+  when: not nux_repofile_result.stat.exists

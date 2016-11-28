@@ -1,0 +1,46 @@
+---
+- name: Install rivendell dependencies
+  package:
+    name="{{ item }}"
+    state=present
+  with_items: "{{ rivendell.pkgs }}"
+  tags: [ "rivendell" ]
+
+- name: "Download rivendell-{{ rivendell.version }} from source"
+  become: yes
+  become_user: "{{ user.name }}"
+  get_url:
+    url: "http://www.rivendellaudio.org/ftpdocs/rivendell/rivendell-{{ rivendell.version }}.tar.gz"
+    dest: "/home/{{ user.name }}/"
+  tags: [ "rivendell" ]
+
+- name: "Unarchive rivendell-{{ rivendell.version }}.tar.gz"
+  become: yes
+  become_user: "{{ user.name }}"
+  unarchive:
+    src="/home/{{ user.name }}/rivendell-{{ rivendell.version }}.tar.gz"
+    dest="/home/{{ user.name }}/"
+    remote_src=yes
+  tags: [ "rivendell" ]
+
+- name: Configure
+  become: yes
+  become_user: "{{ user.name }}"
+  command: "./configure"
+  args:
+    chdir: "/home/{{ user.name }}/rivendell-{{ rivendell.version }}"
+    creates: "/home/{{ user.name }}/rivendell-{{ rivendell.version }}/cae/Makefile"
+  tags: [ "rivendell" ]
+
+- name: Make package
+  # become: yes
+  # become_user: "{{ user.name }}"
+  make:
+    chdir: "/home/{{ user.name }}/rivendell-{{ rivendell.version }}"
+    target: "{{ item }}"
+    params:
+      LDFLAGS: -lpthread
+  with_items:
+    - all
+    - install
+  tags: [ "rivendell" ]

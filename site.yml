@@ -15,9 +15,10 @@
     - user
     - sudo
     - epel
-    - pkgs
+    - nux
+    - dev_tools
     - xfce
-  # - rivendell
+    - rivendell
   # - touchscreen
   # - italc
 
