@@ -18,7 +18,7 @@
     - nux
     - dev_tools
     - xfce
-  # - mysql
+    - mysql
     - rivendell
   # - touchscreen
   # - italc
