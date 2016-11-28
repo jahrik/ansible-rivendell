@@ -106,7 +106,8 @@ Required for:
 
 This role is essentially running the following command.
 ```
-yum groups install X Window system Xfce
+yum groups install X Window system
+yum groups install Xfce
 ```
 Configured in vars/RedHat.yml
 ```
