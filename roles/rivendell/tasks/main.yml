@@ -12,7 +12,7 @@
   get_url:
     url: "http://www.rivendellaudio.org/ftpdocs/rivendell/rivendell-{{ rivendell.version }}.tar.gz"
     dest: "/home/{{ user.name }}/"
-  register: rivendell
+  register: source
   tags: [ "rivendell" ]
 
 - name: "Unarchive rivendell-{{ rivendell.version }}.tar.gz"
@@ -22,7 +22,7 @@
     src="/home/{{ user.name }}/rivendell-{{ rivendell.version }}.tar.gz"
     dest="/home/{{ user.name }}/"
     remote_src=yes
-  when: rivendell.changed
+  when: source.changed
   tags: [ "rivendell" ]
 
 - name: Configure
@@ -32,7 +32,7 @@
   args:
     chdir: "/home/{{ user.name }}/rivendell-{{ rivendell.version }}"
     creates: "/home/{{ user.name }}/rivendell-{{ rivendell.version }}/cae/Makefile"
-  when: rivendell.changed
+  when: source.changed
   tags: [ "rivendell" ]
 
 - name: Make package
@@ -46,5 +46,5 @@
   with_items:
     - all
     - install
-  when: rivendell.changed
+  when: source.changed
   tags: [ "rivendell" ]
