@@ -84,7 +84,10 @@ user:
 Currently set to have passwordless sudo
 
 ### epel : Install EPEL repo
-Required for rpmfusion, soundtouch{-devel}, et al.
+Required for:
+  - rpmfusion
+  - soundtouch{-devel}
+  - et al.
 
 ### nux : Install NUX repo
 Required for:
