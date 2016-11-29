@@ -48,3 +48,12 @@
     - install
   when: source.changed
   tags: [ "rivendell" ]
+
+- name: Create daemon run dir
+  file:
+    path=/var/run/rivendell
+    state=directory
+    owner="{{ user.name }}"
+    group="{{ user.group }}"
+    mode=0755
+  tags: [ "rivendell" ]
