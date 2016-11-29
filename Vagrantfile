@@ -9,8 +9,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "bento/centos-7.2"
 
   config.vm.provider "virtualbox" do |vb|
-    vb.gui = false
-    vb.memory = "1024"
+    vb.gui = true
+    vb.memory = "2048"
   end
 
   authorize_key_for_root config, '~/.ssh/id_rsa.pub'
