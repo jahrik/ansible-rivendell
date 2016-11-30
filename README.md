@@ -13,6 +13,8 @@ Table of Contents
          * [Enter user password [changeme]:](#enter-user-password-changeme)
          * [User](#user)
          * [sudo : Allow rd-user to have passwordless sudo](#sudo--allow-rd-user-to-have-passwordless-sudo)
+         * [hosts : Set hostname](#hosts--set-hostname)
+         * [hosts : Update /etc/hosts](#hosts--update-etchosts)
          * [epel : Install EPEL repo](#epel--install-epel-repo)
          * [nux : Install NUX repo](#nux--install-nux-repo)
          * [dev_tools : Install development tools](#dev_tools--install-development-tools)
@@ -82,6 +84,24 @@ user:
 
 ### sudo : Allow rd-user to have passwordless sudo
 Currently set to have passwordless sudo
+
+### hosts : Set hostname
+
+Configurable in the inventory.ini file
+```
+[rd]
+# rivendell-01 ansible_host='' ansible_user=root
+# rivendell-02 ansible_host='' ansible_user=root
+
+[vagrant]
+rivendell-01.dev ansible_host=192.168.33.11 ansible_user=root
+rivendell-02.dev ansible_host=192.168.33.12 ansible_user=root
+```
+Will also "echo 'hostname' > /etc/hostname" for each machine
+
+### hosts : Update /etc/hosts
+All hosts that are defined with "ansible_host" in the inventory.ini file
+will be dynamically added to every machines /etc/hosts file.
 
 ### epel : Install EPEL repo
 Required for:
