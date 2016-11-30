@@ -5,6 +5,8 @@ user:
   group: users
   shell: /usr/bin/bash
 
+ntp_server: [0.pool.ntp.org, 1.pool.ntp.org]
+
 locale_reg: en_US
 locale: UTF-8
 

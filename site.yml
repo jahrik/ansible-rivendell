@@ -15,6 +15,7 @@
     - user
     - sudo
     - hosts
+    - ntp
     - epel
     - nux
     - dev_tools
