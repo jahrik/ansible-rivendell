@@ -103,6 +103,14 @@ Will also "echo 'hostname' > /etc/hostname" for each machine
 All hosts that are defined with "ansible_host" in the inventory.ini file
 will be dynamically added to every machines /etc/hosts file.
 
+ex. /etc/hosts created for defined vagrant machines above.
+```
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+192.168.33.11 rivendell-01.dev
+192.168.33.12 rivendell-02.dev
+```
+
 ### epel : Install EPEL repo
 Required for:
   - rpmfusion
