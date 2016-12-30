@@ -9,6 +9,7 @@ desktop:
 
 rivendell:
   version: 2.15.1
+  src_dir: /usr/local/src
   pkgs:
   - libogg-devel
   - vorbis-tools
