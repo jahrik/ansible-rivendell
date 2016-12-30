@@ -16,6 +16,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   authorize_key_for_root config, '~/.ssh/id_rsa.pub'
   config.vm.provision 'shell', inline: 'yum update -y'
   config.vm.provision 'shell', inline: 'yum install -y vim'
+  config.vm.provision 'shell', inline: 'yum install -y mlocate && updatedb'
 
   {
     'rivendell-01'   => '192.168.33.11',
