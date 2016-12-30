@@ -1,8 +1,8 @@
 ---
 user:
-  name: rd-user
+  name: rd
   uid: 1001
-  group: users
+  group: rivendell
   shell: /usr/bin/bash
 
 ntp_server: [0.pool.ntp.org, 1.pool.ntp.org]
