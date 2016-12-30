@@ -6,32 +6,36 @@
   with_items: "{{ rivendell.pkgs }}"
   tags: [ "rivendell" ]
 
+- name: Test if rivendell is already installed
+  stat: path=/usr/local/bin/rdadmin
+  register: rd_admin
+  tags: [ "rivendell" ]
+
+- debug: msg="Rivendell is installed"
+  when: rd_admin.stat.exists
+  tags: [ "rivendell" ]
+
 - name: "Download rivendell-{{ rivendell.version }} from source"
-  become: yes
-  become_user: "{{ user.name }}"
   get_url:
     url: "http://www.rivendellaudio.org/ftpdocs/rivendell/rivendell-{{ rivendell.version }}.tar.gz"
-    dest: "/home/{{ user.name }}/"
+    dest: "{{ rivendell.src_dir }}"
   register: source
+  # when: not rd_admin.stat.exists
   tags: [ "rivendell" ]
 
 - name: "Unarchive rivendell-{{ rivendell.version }}.tar.gz"
-  become: yes
-  become_user: "{{ user.name }}"
   unarchive:
-    src="/home/{{ user.name }}/rivendell-{{ rivendell.version }}.tar.gz"
-    dest="/home/{{ user.name }}/"
+    src="{{ rivendell.src_dir }}/rivendell-{{ rivendell.version }}.tar.gz"
+    dest="{{ rivendell.src_dir }}"
     remote_src=yes
   when: source.changed
   tags: [ "rivendell" ]
 
 - name: Configure
-  become: yes
-  become_user: "{{ user.name }}"
   command: "./configure"
   args:
-    chdir: "/home/{{ user.name }}/rivendell-{{ rivendell.version }}"
-    creates: "/home/{{ user.name }}/rivendell-{{ rivendell.version }}/cae/Makefile"
+    chdir: "{{ rivendell.src_dir }}/rivendell-{{ rivendell.version }}"
+    creates: "{{ rivendell.src_dir }}/rivendell-{{ rivendell.version }}/cae/Makefile"
   when: source.changed
   tags: [ "rivendell" ]
 
@@ -39,7 +43,7 @@
   # become: yes
   # become_user: "{{ user.name }}"
   make:
-    chdir: "/home/{{ user.name }}/rivendell-{{ rivendell.version }}"
+    chdir: "{{ rivendell.src_dir }}/rivendell-{{ rivendell.version }}"
     target: "{{ item }}"
     params:
       LDFLAGS: -lpthread
@@ -49,11 +53,51 @@
   when: source.changed
   tags: [ "rivendell" ]
 
-- name: Create daemon run dir
+- name: daemon reload
+  command: systemctl daemon-reload
+  when: source.changed
+  tags: [ "rivendell" ]
+
+#- name: Remove source files.
+#  file:
+#    path: "{{ item }}"
+#    state: absent
+#  with_items:
+#    - "{{ rivendell.src_dir }}/rivendell-{{ rivendell.version }}.tar.gz"
+#    - "{{ rivendell.src_dir }}/rivendell-{{ rivendell.version }}"
+#  tags: [ "rivendell" ]
+
+- name: Create rivendell directories
   file:
-    path=/var/run/rivendell
+    path="{{ item }}"
     state=directory
     owner="{{ user.name }}"
     group="{{ user.group }}"
     mode=0755
+  with_items:
+    - /var/run/rivendell
+    - "/home/{{ user.name }}/rdlogs"
+  tags: [ "rivendell" ]
+
+- name: Generate /etc/rd.conf
+  template:
+    src=rd.conf.j2
+    dest="/etc/rd.conf"
+    owner=root
+    group=root
+    mode=0644
+  tags: [ "rivendell" ]
+
+- name: Add "{{ user.name }}" to audio groups
+  user:
+    name="{{ user.name }}"
+    groups=audio,jackuser
+    append=yes
+  tags: [ "rivendell" ]
+    
+- name: Start rivendell system daemons
+  service:
+    name=rivendell
+    enabled=yes
+    # state=started
   tags: [ "rivendell" ]
