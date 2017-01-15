@@ -3,28 +3,33 @@
   become: true
   become_method: sudo
   vars_files:
-    - vars/all.yml
     - vars/mysql.yml
     - "vars/{{ ansible_os_family }}.yml"
-  vars_prompt:
-    - name: "user_password"
-      prompt: "Enter rd-user password"
-      default: changeme
-      private: yes
 
   roles:
     - user
-    - sudo
+    # - sudo
     - hosts
     - ntp
     - epel
     - nux
     - dev_tools
     - xfce
-    - mysql
     - rivendell
+    - mysql
   # - touchscreen
   # - italc
 
   tasks:
 
+    - name: Set timezone
+      timezone:
+        name: "{{ time_zone }}"
+      tags: [ 'timezone']
+
+    - name: Add "{{ locale }}" to locale.conf
+      lineinfile:
+        dest=/etc/locale.conf
+        line="LANG={{ locale }}"
+        state=present
+      tags: [ "locale" ]

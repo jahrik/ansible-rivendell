@@ -45,3 +45,5 @@ rivendell:
   - pam-devel
   - soundtouch
   - soundtouch-devel
+  - vim
+  - mlocate
