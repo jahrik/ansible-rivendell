@@ -1,0 +1,22 @@
+---
+# Users.
+mysql_users:
+  - name: repl
+    host: localhost
+    password: changeme
+    priv: "*.*:RELOAD,REPLICATION SLAVE,REPLICATION CLIENT,SUPER"
+  - name: repl
+    host: rivendell-02
+    password: changeme
+    priv: "*.*:RELOAD,REPLICATION SLAVE,REPLICATION CLIENT,SUPER"
+    append_privs: yes
+
+# Replication settings (replication is only enabled if master/user have values).
+mysql_server_id: "1"
+mysql_max_binlog_size: "100M"
+mysql_binlog_format: "ROW"
+mysql_expire_logs_days: "10"
+# mysql_replication_role: 'master'
+# mysql_replication_master: 'rivendell-01'
+# Same keys as `mysql_users` above.
+mysql_replication_user: []

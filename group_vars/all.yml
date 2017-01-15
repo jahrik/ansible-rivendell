@@ -1,15 +1,12 @@
 ---
 user:
   name: rd-user
-  uid: 1001
+  uid: 1000
   group: rd-user
   shell: /usr/bin/bash
   groups: [rivendell, wheel, audio, jackuser]
+  password: changeme
 
 ntp_server: [0.pool.ntp.org, 1.pool.ntp.org]
-
-locale_reg: en_US
-locale: UTF-8
-
-time_reg: US
-time_zone: Mountain
+locale: en_US.UTF-8
+time_zone: US/Mountain
