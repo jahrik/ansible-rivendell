@@ -296,6 +296,7 @@ group_vars/all.yml
 ```
 user:
   groups:
+    - rivendell
     - audio
     - jackuser
 ```
