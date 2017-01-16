@@ -33,3 +33,10 @@
         line="LANG={{ locale }}"
         state=present
       tags: [ "locale" ]
+
+    - name: Stop and disable firewalld.
+      service:
+        name: firewalld
+        state: stopped
+        enabled: false
+      tags: [ "firewall" ]
