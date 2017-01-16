@@ -47,3 +47,4 @@ rivendell:
   - soundtouch-devel
   - vim
   - mlocate
+  - alsa-utils
