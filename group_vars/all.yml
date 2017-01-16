@@ -4,7 +4,10 @@ user:
   uid: 1000
   group: rd-user
   shell: /usr/bin/bash
-  groups: [rivendell, wheel, audio, jackuser]
+  groups:
+    - rivendell
+    - audio
+    - jackuser
   password: changeme
 
 ntp_server: [0.pool.ntp.org, 1.pool.ntp.org]
