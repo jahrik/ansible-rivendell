@@ -8,12 +8,12 @@
 [Identity]
 ; These entries are used to define the system user and group that will
 ; own the audio files.
-AudioOwner=rivendell
-AudioGroup=rivendell
+AudioOwner={{ user.name }}
+AudioGroup={{ user.group }}
 
 ; This password is used by the various Rivendell modules to log into 
 ; Rivendell system services [caed(8), ripcd(8), rdcatchd(8)].
-Password=letmein
+Password={{ user.password }}
 
 ; This entry is what will appear in RDSelect's list for this configuration.
 Label=Custom (/etc/rd.conf)
@@ -21,8 +21,8 @@ Label=Custom (/etc/rd.conf)
 [mySQL]
 ; The connection parameters for the MySQL server.
 Hostname=localhost
-Loginname=rduser
-Password=letmein
+Loginname={{ user.name }}
+Password={{ user.password }}
 Database=Rivendell
 Driver=QMYSQL3
 
