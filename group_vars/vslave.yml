@@ -1,0 +1,40 @@
+---
+# linux user
+user:
+  name: rd-user
+  uid: 1001
+  group: rd-user
+  shell: /usr/bin/bash
+  groups:
+    - sudo
+    - rivendell
+    - audio
+    - jackuser
+  password: changeme
+
+# Users.
+mysql_users:
+  - name: rd-user
+    host: localhost
+    password: changeme
+    priv: "*.*:ALL"
+  - name: repl
+    host: localhost
+    password: changeme
+    priv: "*.*:RELOAD,REPLICATION SLAVE,REPLICATION CLIENT,SUPER"
+  - name: repl
+    host: rivendell-01.dev
+    password: changeme
+    priv: "*.*:RELOAD,REPLICATION SLAVE,REPLICATION CLIENT,SUPER"
+    append_privs: yes
+
+# Replication settings (replication is only enabled if master/user have values).
+mysql_server_id: "2"
+mysql_replication_role: 'slave'
+mysql_replication_master: 'rivendell-01.dev'
+# Same keys as `mysql_users` above.
+mysql_replication_user:
+  name: repl
+  # host: rivendell-01.dev
+  password: changeme
+  # priv: "*.*:RELOAD,REPLICATION SLAVE,REPLICATION CLIENT,SUPER"

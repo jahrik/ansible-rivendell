@@ -1,0 +1,45 @@
+---
+# linux user
+user:
+  name: rd-user
+  uid: 1001
+  group: rd-user
+  shell: /usr/bin/bash
+  groups:
+    - sudo
+    - rivendell
+    - audio
+    - jackuser
+  password: changeme
+  update_password: always
+
+# MySQL users
+mysql_users:
+  - name: rd-user
+    host: localhost
+    password: changeme
+    update_password: always
+    priv: "*.*:ALL"
+  - name: repl
+    host: localhost
+    password: changeme
+    update_password: always
+    priv: "*.*:RELOAD,REPLICATION SLAVE,REPLICATION CLIENT,SUPER"
+
+## Databases.
+#mysql_databases:
+#  - name: Rivendell
+#    collation: utf8_general_ci
+#    encoding: utf8
+#    # replicate: 1
+
+# Replication settings (replication is only enabled if master/user have values).
+mysql_server_id: "1"
+mysql_replication_role: 'master'
+mysql_replication_master: 'rivendell-01.dev'
+# Same keys as `mysql_users` above.
+mysql_replication_user:
+  name: repl
+  host: rivendell-02.dev
+  password: changeme
+  priv: "*.*:RELOAD,REPLICATION SLAVE,REPLICATION CLIENT,SUPER"
