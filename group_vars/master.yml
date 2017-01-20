@@ -27,12 +27,6 @@ mysql_users:
     password: changeme
     update_password: always
     priv: "*.*:RELOAD,REPLICATION SLAVE,REPLICATION CLIENT,SUPER"
-  - name: repl
-    host: rivendell-02
-    password: changeme
-    update_password: always
-    priv: "*.*:RELOAD,REPLICATION SLAVE,REPLICATION CLIENT,SUPER"
-    append_privs: yes
 
 # Databases.
 #mysql_databases:
