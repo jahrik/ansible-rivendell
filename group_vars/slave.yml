@@ -1,4 +1,16 @@
 ---
+# linux user
+user:
+  name: rd-user
+  uid: 1000
+  group: rd-user
+  shell: /usr/bin/bash
+  groups:
+    - rivendell
+    - audio
+    - jackuser
+  password: changeme
+
 # Users.
 mysql_users:
   - name: rd-user
@@ -10,7 +22,7 @@ mysql_users:
     password: changeme
     priv: "*.*:RELOAD,REPLICATION SLAVE,REPLICATION CLIENT,SUPER"
   - name: repl
-    host: 192.168.1.133
+    host: rivendell-01
     password: changeme
     priv: "*.*:RELOAD,REPLICATION SLAVE,REPLICATION CLIENT,SUPER"
     append_privs: yes
@@ -18,10 +30,10 @@ mysql_users:
 # Replication settings (replication is only enabled if master/user have values).
 mysql_server_id: "2"
 mysql_replication_role: 'slave'
-mysql_replication_master: '192.168.1.133'
+mysql_replication_master: 'rivendell-01'
 # Same keys as `mysql_users` above.
 mysql_replication_user:
   name: repl
-  host: 192.168.1.133
+  host: rivendell-01
   password: changeme
   priv: "*.*:RELOAD,REPLICATION SLAVE,REPLICATION CLIENT,SUPER"
