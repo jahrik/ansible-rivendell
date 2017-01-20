@@ -14,16 +14,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   authorize_key_for_root config, '~/.ssh/id_rsa.pub'
-  config.vm.provision 'shell', inline: 'yum update -y'
-  config.vm.provision 'shell', inline: 'yum install -y vim'
+  # config.vm.provision 'shell', inline: 'yum update -y'
+  config.vm.provision 'shell', inline: 'yum install -y vim iftop innotop'
   config.vm.provision 'shell', inline: 'yum install -y mlocate && updatedb'
+  config.vm.provision 'shell', inline: 'sudo nmcli connection reload',
+    run: 'always'
+  config.vm.provision 'shell', inline: 'sudo systemctl restart network.service',
+    run: 'always'
 
   {
-    'rivendell-01'   => '192.168.33.11',
-    'rivendell-02'   => '192.168.33.12',
+    'rivendell-01'   => '192.168.1.11',
+    'rivendell-02'   => '192.168.1.12',
   }.each do |short_name, ip|
     config.vm.define short_name do |host|
-      host.vm.network 'private_network', ip: ip
+      host.vm.network "public_network", { bridge: 'wlp3s0', ip: ip }
       host.vm.hostname = "#{short_name}.dev"
       host.vm.provider "virtualbox" do |vb|
       end
