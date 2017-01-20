@@ -6,27 +6,48 @@ user:
   group: rd-user
   shell: /usr/bin/bash
   groups:
+    - sudo
     - rivendell
     - audio
     - jackuser
   password: changeme
+  # Update password on next ansible run
+  # options are "on_create" or "always"
+  update_password: always
 
 # MySQL users
 mysql_users:
   - name: rd-user
     host: localhost
     password: changeme
+    update_password: always
     priv: "*.*:ALL"
   - name: repl
     host: localhost
     password: changeme
+    update_password: always
     priv: "*.*:RELOAD,REPLICATION SLAVE,REPLICATION CLIENT,SUPER"
   - name: repl
     host: rivendell-02
     password: changeme
+    update_password: always
     priv: "*.*:RELOAD,REPLICATION SLAVE,REPLICATION CLIENT,SUPER"
     append_privs: yes
+
+# Databases.
+#mysql_databases:
+#  - name: Rivendell
+#    collation: utf8_general_ci
+#    encoding: utf8
+#    # replicate: 1
 
 # Replication settings (replication is only enabled if master/user have values).
 mysql_server_id: "1"
 mysql_replication_role: 'master'
+mysql_replication_master: 'rivendell-01'
+# Same keys as `mysql_users` above.
+mysql_replication_user:
+  name: repl
+  host: rivendell-02
+  password: changeme
+  priv: "*.*:RELOAD,REPLICATION SLAVE,REPLICATION CLIENT,SUPER"
