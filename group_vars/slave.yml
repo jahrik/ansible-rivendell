@@ -6,24 +6,31 @@ user:
   group: rd-user
   shell: /usr/bin/bash
   groups:
+    - sudo
     - rivendell
     - audio
     - jackuser
   password: changeme
+  # Update password on next ansible run
+  # options are "on_create" or "always"
+  update_password: on_create
 
 # Users.
 mysql_users:
   - name: rd-user
     host: localhost
     password: changeme
+    update_password: on_create
     priv: "*.*:ALL"
   - name: repl
     host: localhost
     password: changeme
+    update_password: on_create
     priv: "*.*:RELOAD,REPLICATION SLAVE,REPLICATION CLIENT,SUPER"
   - name: repl
     host: rivendell-01
     password: changeme
+    update_password: on_create
     priv: "*.*:RELOAD,REPLICATION SLAVE,REPLICATION CLIENT,SUPER"
     append_privs: yes
 
@@ -34,6 +41,6 @@ mysql_replication_master: 'rivendell-01'
 # Same keys as `mysql_users` above.
 mysql_replication_user:
   name: repl
-  host: rivendell-01
+  # host: rivendell-01
   password: changeme
-  priv: "*.*:RELOAD,REPLICATION SLAVE,REPLICATION CLIENT,SUPER"
+  # priv: "*.*:RELOAD,REPLICATION SLAVE,REPLICATION CLIENT,SUPER"
