@@ -5,12 +5,22 @@
     state=present
   tags: [ "user" ]
 
+- name: Create groups
+  group:
+    name="{{ item }}"
+    state=present
+  tags: [ "user" ]
+  with_items: "{{ user.groups }}"
+
 - name: Create user and assign to group
   user:
     name={{ user.name }}
     group={{ user.group }}
-    password={{ user.password|password_hash('sha512') }}
+    groups="{{ item }}"
+    append=yes
+    password={{ user.password | password_hash('sha512') }}
     shell={{ user.shell }}
-    update_password=always
+    update_password={{ user.update_password | default('always') }}
     uid={{ user.uid }}
+  with_items: "{{ user.groups }}"
   tags: [ "user" ]
