@@ -87,22 +87,7 @@
     group=root
     mode=0644
   tags: [ "rivendell" ]
-
-- name: Create rivendell groups
-  group:
-    name="{{ item }}"
-    state=present
-  tags: [ "rivendell", "user" ]
-  with_items: "{{ user.groups }}"
-
-- name: Add "{{ user.name }}" to audio groups
-  user:
-    name="{{ user.name }}"
-    groups="{{ item }}"
-    append=yes
-  tags: [ "rivendell", "user" ]
-  with_items: "{{ user.groups }}"
-    
+   
 - name: Start rivendell system daemons
   service:
     name=rivendell
