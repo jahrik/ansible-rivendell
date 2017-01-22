@@ -349,7 +349,36 @@ systemctl start mariadb.service
 ### Failed to open the relay log './mariadb-relay-bin.000001'
 Reset slave server
 ```
-mysql >
-RESET SLAVE;
+mysql> RESET SLAVE;
+
+```
+
+### [ERROR] Error reading packet from server: Client requested master to start replication from impossible position ( server_errno=1236) - See more at: https://mariadb.com/resources/blog/client-requested-master-start-replication-impossible-position#sthash.mPu5mFE9.dpuf
+
+[https://mariadb.com/resources/blog/client-requested-master-start-replication-impossible-position](https://mariadb.com/resources/blog/client-requested-master-start-replication-impossible-position)
+
+On Master:
+```
+MariaDB [(none)]> show master status;
++------------------+----------+--------------+------------------+
+| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB |
++------------------+----------+--------------+------------------+
+| mysql-bin.000008 |   128046 |              |                  |
++------------------+----------+--------------+------------------+
+1 row in set (0.00 sec)
+```
+
+Check for last bin log on Slave:
+```
+tail /var/log/mariadb/mariadb.log
+...
+170120 10:26:26 [ERROR] Slave I/O: Got fatal error 1236 from master when reading data from binary log: 'Client requested master to start replication from impossible position; the first event 'mysql-bin.000005' at 576960, the last event read from 'mysql-bin.000005' at 4, the last byte read from 'mysql-bin.000005' at 4.', Error_code: 1236
+...
+```
+
+Restart from next bin log file on Slave:
+```
+mysql> STOP SLAVE;
+mysql> CHANGE MASTER TO MASTER_LOG_FILE='mysql-bin.000006',MASTER_LOG_POS=4;
 
 ```
