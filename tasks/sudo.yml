@@ -6,6 +6,6 @@
   ansible.builtin.lineinfile:
     dest: /etc/sudoers
     state: present
-    regexp: "^{{ user.name }}"
+    regexp: '^{{ user.name | regex_escape }}\s'
     line: "{{ user.name }} ALL=(ALL) NOPASSWD: ALL"
     validate: "visudo -cf %s"

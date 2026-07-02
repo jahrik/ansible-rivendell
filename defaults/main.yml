@@ -49,6 +49,12 @@ desktop:
 rivendell:
   version: 2.15.1
   src_dir: /usr/local/src
+  source_url: "https://www.rivendellaudio.org/ftpdocs/rivendell/rivendell-{{ rivendell.version }}.tar.gz"
+  # Checksum for the source tarball above, in the form get_url expects
+  # (e.g. "sha256:<hex digest>"). Left blank because no known-good checksum
+  # is published upstream for this release -- set this in your own
+  # group_vars/host_vars if you have one, to get get_url's integrity check.
+  source_checksum: ""
   pkgs:
     - libogg-devel
     - vorbis-tools

@@ -16,10 +16,10 @@
 
 - name: "Download the Rivendell source archive for version {{ rivendell.version }}"
   ansible.builtin.get_url:
-    url: "http://www.rivendellaudio.org/ftpdocs/rivendell/rivendell-{{ rivendell.version }}.tar.gz"
+    url: "{{ rivendell.source_url }}"
     dest: "{{ rivendell.src_dir }}"
     mode: "0644"
-  register: rivendell_source
+    checksum: "{{ rivendell.source_checksum | default('') or omit }}"
   when: not rd_admin.stat.exists
 
 - name: "Unarchive the Rivendell source for version {{ rivendell.version }}"

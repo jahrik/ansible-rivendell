@@ -6,6 +6,7 @@
 - name: "Configure locale.conf with locale {{ locale }}"
   ansible.builtin.lineinfile:
     dest: /etc/locale.conf
+    regexp: '^LANG='
     line: "LANG={{ locale }}"
     state: present
 

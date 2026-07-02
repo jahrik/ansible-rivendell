@@ -31,8 +31,9 @@ ansible-playbook -i inventory.ini playbook.yml
 Galaxy role dependencies (EPEL, NTP, MySQL -- see [Dependencies](#dependencies)) run automatically
 before this role's own tasks.
 
-Each area can be re-applied on its own with tags: `user`, `hosts`, `sudo`, `dev_tools`, `repos`,
-`xfce`, `install`, `misc` -- e.g. `--tags rivendell:xfce`.
+Each area can be re-applied on its own with tags: `rivendell:user`, `rivendell:hosts`,
+`rivendell:sudo`, `rivendell:dev_tools`, `rivendell:repos`, `rivendell:xfce`, `rivendell:install`,
+`rivendell:misc` -- e.g. `--tags rivendell:xfce`.
 
 ## Dependencies
 
