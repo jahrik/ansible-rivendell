@@ -1,0 +1,37 @@
+---
+# ansible.builtin.yum (not dnf) is required: this role targets EL7, which has
+# no dnf, and yum group syntax ("@Group Name") is yum-specific.
+- name: Install desktop packages
+  ansible.builtin.yum: # noqa: fqcn[action-core]
+    name: "{{ item }}"
+    state: present
+  loop: "{{ desktop.pkgs }}"
+
+- name: Enable GUI on startup
+  ansible.builtin.file:
+    src: /usr/lib/systemd/system/graphical.target
+    dest: /etc/systemd/system/default.target
+    owner: root
+    group: root
+    state: link
+
+- name: Generate ~/.xinitrc
+  ansible.builtin.template:
+    src: xinitrc.j2
+    dest: "/home/{{ user.name }}/.xinitrc"
+    owner: "{{ user.name }}"
+    group: "{{ user.group }}"
+    mode: "0755"
+
+- name: "Enable autologin for {{ user.name }}"
+  ansible.builtin.template:
+    src: custom.conf.j2
+    dest: /etc/gdm/custom.conf
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Enable desktop manager service
+  ansible.builtin.service:
+    name: "{{ desktop.dm }}"
+    enabled: true

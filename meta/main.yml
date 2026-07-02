@@ -1,0 +1,27 @@
+---
+galaxy_info:
+  role_name: rivendell
+  namespace: jahrik
+  author: jahrik
+  description: Build Rivendell radio automation from source with an XFCE desktop on EL/CentOS
+  issue_tracker_url: https://github.com/jahrik/ansible-rivendell/issues
+  license: MIT
+  min_ansible_version: '2.16'
+  platforms:
+    - name: EL
+      versions:
+        - '7'
+  galaxy_tags:
+    - rivendell
+    - radio
+    - broadcast
+    - audio
+    - xfce
+    - centos
+dependencies:
+  - role: geerlingguy.repo-epel
+    version: 3.1.1
+  - role: geerlingguy.ntp
+    version: 4.0.0
+  - role: geerlingguy.mysql
+    version: 6.4.0

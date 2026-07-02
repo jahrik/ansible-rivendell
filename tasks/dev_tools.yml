@@ -1,0 +1,7 @@
+---
+# ansible.builtin.yum (not dnf) is required: this role targets EL7, which has
+# no dnf, and yum group syntax ("@Group Name") is yum-specific.
+- name: Install development tools
+  ansible.builtin.yum: # noqa: fqcn[action-core]
+    name: "@Development Tools"
+    state: present

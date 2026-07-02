@@ -1,0 +1,124 @@
+---
+# ---------------------------------------------------------------------------
+# Linux account used to run Rivendell, log in to the XFCE desktop, and own
+# the audio store. Override sguil-style secrets via Ansible Vault -- never
+# commit a real password here.
+# ---------------------------------------------------------------------------
+user:
+  name: rd-user
+  uid: 1000
+  group: rd-user
+  shell: /usr/bin/bash
+  groups:
+    - rivendell
+    - audio
+    - jackuser
+  # CHANGEME: placeholder only. Override via Ansible Vault in a real
+  # group_vars/host_vars file; never commit a real password here.
+  password: CHANGEME
+  # Options are "on_create" or "always".
+  update_password: always
+
+# Passwordless sudo for `user.name` is opt-in, matching the upstream project.
+rivendell_sudo_enabled: false
+
+locale: en_US.UTF-8
+time_zone: US/Mountain
+
+# ---------------------------------------------------------------------------
+# NUX (Dextop) repo -- provides libmad, twolame, lame, and friends. EPEL is
+# handled by the geerlingguy.repo-epel role dependency in meta/main.yml.
+# ---------------------------------------------------------------------------
+nux_repo_url: "http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el{{ ansible_facts['distribution_major_version'] }}.nux.noarch.rpm"
+nux_repo_gpg_key_url: "http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro"
+nux_repofile_path: "/etc/yum.repos.d/nux-dextop.repo"
+
+# ---------------------------------------------------------------------------
+# XFCE desktop.
+# ---------------------------------------------------------------------------
+desktop:
+  pkgs:
+    - '@X Window system'
+    - '@Xfce'
+  session: xfce4-session
+  dm: gdm.service
+
+# ---------------------------------------------------------------------------
+# Rivendell build-from-source.
+# ---------------------------------------------------------------------------
+rivendell:
+  version: 2.15.1
+  src_dir: /usr/local/src
+  source_url: "https://www.rivendellaudio.org/ftpdocs/rivendell/rivendell-{{ rivendell.version }}.tar.gz"
+  # Checksum for the source tarball above, in the form get_url expects
+  # (e.g. "sha256:<hex digest>"). Left blank because no known-good checksum
+  # is published upstream for this release -- set this in your own
+  # group_vars/host_vars if you have one, to get get_url's integrity check.
+  source_checksum: ""
+  pkgs:
+    - libogg-devel
+    - vorbis-tools
+    - libvorbis-devel
+    - flac-devel
+    - libmad
+    - libmad-devel
+    - twolame
+    - twolame-devel
+    - lame
+    - lame-devel
+    - alsa-lib-devel
+    - jack-audio-connection-kit
+    - jack-audio-connection-kit-devel
+    - qt
+    - qt-devel
+    - qt-mysql
+    - qt3
+    - qt3-devel
+    - qt3-MySQL
+    - libsamplerate
+    - libsamplerate-devel
+    - libsndfile
+    - libsndfile-devel
+    - cdparanoia
+    - libXmu-devel
+    - cdparanoia-devel
+    - cdparanoia-libs
+    - id3lib
+    - id3lib-devel
+    - libcurl
+    - libcurl-devel
+    - pam-devel
+    - soundtouch
+    - soundtouch-devel
+    - vim
+    - mlocate
+    - alsa-utils
+
+# ---------------------------------------------------------------------------
+# geerlingguy.ntp (role dependency, see meta/main.yml).
+# ---------------------------------------------------------------------------
+ntp_timezone: "{{ time_zone }}"
+ntp_manage_config: true
+ntp_servers:
+  - 0.pool.ntp.org iburst
+  - 1.pool.ntp.org iburst
+
+# ---------------------------------------------------------------------------
+# geerlingguy.mysql (role dependency, see meta/main.yml). CHANGEME values are
+# placeholders -- override via Ansible Vault, never commit real credentials.
+# ---------------------------------------------------------------------------
+mysql_root_username: root
+mysql_root_password: CHANGEME
+mysql_root_password_update: false
+mysql_enabled_on_startup: true
+
+mysql_databases:
+  - name: Rivendell
+    encoding: utf8
+    collation: utf8_general_ci
+
+mysql_users:
+  - name: "{{ user.name }}"
+    host: localhost
+    password: CHANGEME
+    priv: "*.*:ALL"

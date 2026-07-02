@@ -1,0 +1,17 @@
+---
+- name: Set timezone
+  community.general.timezone:
+    name: "{{ time_zone }}"
+
+- name: "Configure locale.conf with locale {{ locale }}"
+  ansible.builtin.lineinfile:
+    dest: /etc/locale.conf
+    regexp: '^LANG='
+    line: "LANG={{ locale }}"
+    state: present
+
+- name: Stop and disable firewalld
+  ansible.builtin.service:
+    name: firewalld
+    state: stopped
+    enabled: false
