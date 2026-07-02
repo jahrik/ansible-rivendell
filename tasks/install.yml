@@ -1,0 +1,73 @@
+---
+- name: Install Rivendell build dependencies
+  ansible.builtin.package:
+    name: "{{ rivendell.pkgs }}"
+    state: present
+
+- name: Check whether Rivendell is already installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/rdadmin
+  register: rd_admin
+
+- name: Report existing Rivendell install
+  ansible.builtin.debug:
+    msg: Rivendell is already installed
+  when: rd_admin.stat.exists
+
+- name: "Download the Rivendell source archive for version {{ rivendell.version }}"
+  ansible.builtin.get_url:
+    url: "http://www.rivendellaudio.org/ftpdocs/rivendell/rivendell-{{ rivendell.version }}.tar.gz"
+    dest: "{{ rivendell.src_dir }}"
+    mode: "0644"
+  register: rivendell_source
+  when: not rd_admin.stat.exists
+
+- name: "Unarchive the Rivendell source for version {{ rivendell.version }}"
+  ansible.builtin.unarchive:
+    src: "{{ rivendell.src_dir }}/rivendell-{{ rivendell.version }}.tar.gz"
+    dest: "{{ rivendell.src_dir }}"
+    remote_src: true
+  when: not rd_admin.stat.exists
+
+- name: Configure Rivendell source
+  ansible.builtin.command: ./configure
+  args:
+    chdir: "{{ rivendell.src_dir }}/rivendell-{{ rivendell.version }}"
+    creates: "{{ rivendell.src_dir }}/rivendell-{{ rivendell.version }}/cae/Makefile"
+  when: not rd_admin.stat.exists
+
+- name: Build and install Rivendell
+  community.general.make:
+    chdir: "{{ rivendell.src_dir }}/rivendell-{{ rivendell.version }}"
+    target: "{{ item }}"
+    params:
+      LDFLAGS: -lpthread
+  loop:
+    - all
+    - install
+  when: not rd_admin.stat.exists
+  notify: Daemon reload
+
+- name: Create Rivendell runtime directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ user.name }}"
+    group: "{{ user.group }}"
+    mode: "0755"
+  loop:
+    - /var/run/rivendell
+    - "/home/{{ user.name }}/rdlogs"
+
+- name: Generate /etc/rd.conf
+  ansible.builtin.template:
+    src: rd.conf.j2
+    dest: /etc/rd.conf
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Start Rivendell system daemons
+  ansible.builtin.service:
+    name: rivendell
+    enabled: true

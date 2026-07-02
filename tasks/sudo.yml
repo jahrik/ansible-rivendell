@@ -1,0 +1,11 @@
+---
+# Disabled by default (rivendell_sudo_enabled: false) -- the upstream project
+# left this role disabled too. Passwordless sudo for a broadcast-automation
+# account is a deliberate, opt-in choice.
+- name: "Allow passwordless sudo for {{ user.name }}"
+  ansible.builtin.lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: "^{{ user.name }}"
+    line: "{{ user.name }} ALL=(ALL) NOPASSWD: ALL"
+    validate: "visudo -cf %s"

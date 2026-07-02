@@ -1,0 +1,25 @@
+---
+# EPEL is provided by the geerlingguy.repo-epel dependency in meta/main.yml.
+# NUX (Dextop) has no equivalent Galaxy role, so it stays here.
+- name: Check if the NUX repo is already configured
+  ansible.builtin.stat:
+    path: "{{ nux_repofile_path }}"
+  register: nux_repofile_result
+
+# ansible.builtin.yum (not dnf) is required: this role targets EL7, which has
+# no dnf.
+- name: Install the NUX repo
+  ansible.builtin.yum: # noqa: fqcn[action-core]
+    name: "{{ nux_repo_url }}"
+    state: present
+  register: nux_repo_result
+  until: "'failed' not in nux_repo_result"
+  retries: 5
+  delay: 10
+  when: not nux_repofile_result.stat.exists
+
+- name: Import the NUX GPG key
+  ansible.builtin.rpm_key:
+    key: "{{ nux_repo_gpg_key_url }}"
+    state: present
+  when: not nux_repofile_result.stat.exists

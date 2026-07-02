@@ -1,4 +1,0 @@
----
-ntp_server: [0.pool.ntp.org, 1.pool.ntp.org]
-locale: en_US.UTF-8
-time_zone: US/Mountain

@@ -1,0 +1,93 @@
+---
+# Dispatches each area of the role behind its own tag so a single area can be
+# re-applied on its own (e.g. `--tags rivendell:xfce`). Galaxy role dependencies
+# (EPEL, NTP, MySQL -- see meta/main.yml) run automatically before these tasks.
+
+- name: User account
+  ansible.builtin.include_tasks:
+    file: user.yml
+    apply:
+      tags:
+        - rivendell
+        - rivendell:user
+  tags:
+    - rivendell
+    - rivendell:user
+
+- name: Hostname and /etc/hosts
+  ansible.builtin.include_tasks:
+    file: hosts.yml
+    apply:
+      tags:
+        - rivendell
+        - rivendell:hosts
+  tags:
+    - rivendell
+    - rivendell:hosts
+
+- name: Passwordless sudo
+  ansible.builtin.include_tasks:
+    file: sudo.yml
+    apply:
+      tags:
+        - rivendell
+        - rivendell:sudo
+  when: rivendell_sudo_enabled | bool
+  tags:
+    - rivendell
+    - rivendell:sudo
+
+- name: Development tools
+  ansible.builtin.include_tasks:
+    file: dev_tools.yml
+    apply:
+      tags:
+        - rivendell
+        - rivendell:dev_tools
+  tags:
+    - rivendell
+    - rivendell:dev_tools
+
+- name: Extra yum repositories
+  ansible.builtin.include_tasks:
+    file: repos.yml
+    apply:
+      tags:
+        - rivendell
+        - rivendell:repos
+  tags:
+    - rivendell
+    - rivendell:repos
+
+- name: XFCE desktop
+  ansible.builtin.include_tasks:
+    file: xfce.yml
+    apply:
+      tags:
+        - rivendell
+        - rivendell:xfce
+  tags:
+    - rivendell
+    - rivendell:xfce
+
+- name: Build and install Rivendell
+  ansible.builtin.include_tasks:
+    file: install.yml
+    apply:
+      tags:
+        - rivendell
+        - rivendell:install
+  tags:
+    - rivendell
+    - rivendell:install
+
+- name: Timezone, locale, and firewall
+  ansible.builtin.include_tasks:
+    file: misc.yml
+    apply:
+      tags:
+        - rivendell
+        - rivendell:misc
+  tags:
+    - rivendell
+    - rivendell:misc

@@ -1,0 +1,8 @@
+---
+roles:
+  - name: geerlingguy.repo-epel
+  - name: geerlingguy.ntp
+  - name: geerlingguy.mysql
+
+collections:
+  - name: community.general

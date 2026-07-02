@@ -1,0 +1,22 @@
+---
+- name: Create user group
+  ansible.builtin.group:
+    name: "{{ user.group }}"
+    state: present
+
+- name: Create supplementary groups
+  ansible.builtin.group:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ user.groups }}"
+
+- name: Create user and assign to group
+  ansible.builtin.user:
+    name: "{{ user.name }}"
+    group: "{{ user.group }}"
+    groups: "{{ user.groups }}"
+    append: true
+    password: "{{ user.password | password_hash('sha512') }}"
+    shell: "{{ user.shell }}"
+    update_password: "{{ user.update_password | default('always') }}"
+    uid: "{{ user.uid }}"
